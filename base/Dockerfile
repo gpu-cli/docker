@@ -8,6 +8,7 @@
 # Includes:
 #   - curl, wget, ca-certificates (for downloading gpu-pod-agent)
 #   - openssh-server (pre-configured for RunPod)
+#   - python3 (for running Python scripts)
 #   - bash, basic coreutils
 
 FROM ubuntu:22.04
@@ -23,6 +24,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     # SSH server for GPU CLI communication
     openssh-server \
+    # Python runtime
+    python3 \
     # Basic utilities
     bash \
     coreutils \

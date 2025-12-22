@@ -9,13 +9,14 @@ Minimal bootstrap images for GPU CLI.
 Minimal Ubuntu 22.04 image (~50MB compressed) with:
 - `curl`, `wget`, `ca-certificates` - for downloading gpu-pod-agent
 - `openssh-server` - pre-configured for key-only auth
+- `python3` - Python runtime
 - `bash`, basic coreutils
 
 ```dockerfile
 FROM ghcr.io/gpu-cli/base:latest
 
-# Add your ML dependencies
-RUN apt-get update && apt-get install -y python3 python3-pip
+# Add your ML dependencies (python3 already included)
+RUN apt-get update && apt-get install -y python3-pip
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
