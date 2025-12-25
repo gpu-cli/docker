@@ -26,6 +26,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     openssh-server \
     # Python runtime
     python3 \
+    python-is-python3 \
     # Basic utilities
     bash \
     coreutils \
