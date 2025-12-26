@@ -7,9 +7,10 @@
 #
 # Includes:
 #   - curl, wget, ca-certificates (for downloading gpu-pod-agent)
-#   - openssh-server (pre-configured for RunPod)
 #   - python3 (for running Python scripts)
 #   - bash, basic coreutils
+#
+# Note: No SSH server - GPU CLI uses gpu-pod-agent for communication
 
 FROM ubuntu:22.04
 
@@ -22,24 +23,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     wget \
     ca-certificates \
-    # SSH server for GPU CLI communication
-    openssh-server \
     # Python runtime
     python3 \
     python-is-python3 \
     # Basic utilities
     bash \
     coreutils \
-    && rm -rf /var/lib/apt/lists/* \
-    # Create SSH directory structure
-    && mkdir -p /var/run/sshd /root/.ssh \
-    && chmod 700 /root/.ssh \
-    # Configure SSH for key-only auth
-    && sed -i 's/#PermitRootLogin.*/PermitRootLogin prohibit-password/' /etc/ssh/sshd_config \
-    && sed -i 's/#PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config \
-    && sed -i 's/#PubkeyAuthentication.*/PubkeyAuthentication yes/' /etc/ssh/sshd_config
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /workspace
 
-# Default command keeps container alive for SSH access
-CMD ["bash", "-c", "exec /usr/sbin/sshd -D"]
+# Default command - container stays alive for gpu-pod-agent
+CMD ["sleep", "infinity"]
