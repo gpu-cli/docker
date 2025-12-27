@@ -6,7 +6,7 @@
 #   # Your ML code here
 #
 # Includes:
-#   - gpu-bootstrap binary (UDP agent delivery through NAT)
+#   - gpu-bootstrap v0.2.0 (agent delivery via WebRTC signaling socket)
 #   - curl, wget, ca-certificates (for downloading gpu-pod-agent)
 #   - python3 (for running Python scripts)
 #   - bash, basic coreutils
@@ -33,10 +33,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Download gpu-bootstrap binary for dev mode agent delivery
-# This tiny binary (~450KB) uses UDP hole-punching to receive the agent from daemon
+# v0.2.0: Uses WebRTC signaling socket for NAT traversal (reads GPU_WEBRTC_OFFER)
 ARG TARGETARCH
+ARG GPU_BOOTSTRAP_VERSION=v0.2.0
 RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "aarch64" || echo "x86_64") && \
-    curl -fsSL "https://github.com/gpu-cli/gpu-bootstrap/releases/latest/download/gpu-bootstrap-linux-${ARCH}" \
+    curl -fsSL "https://github.com/gpu-cli/gpu-bootstrap/releases/download/${GPU_BOOTSTRAP_VERSION}/gpu-bootstrap-linux-${ARCH}" \
     -o /usr/local/bin/gpu-bootstrap && \
     chmod +x /usr/local/bin/gpu-bootstrap
 
