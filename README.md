@@ -7,8 +7,8 @@ Minimal bootstrap images for GPU CLI.
 ### `ghcr.io/gpu-cli/base`
 
 Minimal Ubuntu 22.04 image (~50MB compressed) with:
+- `gpu-bootstrap` - UDP agent delivery through NAT (dev mode)
 - `curl`, `wget`, `ca-certificates` - for downloading gpu-pod-agent
-- `openssh-server` - pre-configured for key-only auth
 - `python3` - Python runtime
 - `bash`, basic coreutils
 
@@ -33,8 +33,8 @@ docker build -t gpu-cli-base:local .
 # Test it
 docker run -it --rm gpu-cli-base:local bash
 
-# Verify curl/wget work
-docker run --rm gpu-cli-base:local curl -fsSL https://gpu-cli.sh
+# Verify gpu-bootstrap is installed
+docker run --rm gpu-cli-base:local gpu-bootstrap --help
 ```
 
 ## Release

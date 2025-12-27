@@ -6,6 +6,7 @@
 #   # Your ML code here
 #
 # Includes:
+#   - gpu-bootstrap binary (UDP agent delivery through NAT)
 #   - curl, wget, ca-certificates (for downloading gpu-pod-agent)
 #   - python3 (for running Python scripts)
 #   - bash, basic coreutils
@@ -29,9 +30,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     # Basic utilities
     bash \
     coreutils \
-    # Networking utilities
-    netcat-openbsd \
     && rm -rf /var/lib/apt/lists/*
+
+# Download gpu-bootstrap binary for dev mode agent delivery
+# This tiny binary (~450KB) uses UDP hole-punching to receive the agent from daemon
+ARG TARGETARCH
+RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "aarch64" || echo "x86_64") && \
+    curl -fsSL "https://github.com/gpu-cli/gpu-bootstrap/releases/latest/download/gpu-bootstrap-linux-${ARCH}" \
+    -o /usr/local/bin/gpu-bootstrap && \
+    chmod +x /usr/local/bin/gpu-bootstrap
 
 WORKDIR /workspace
 
